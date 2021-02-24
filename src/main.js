@@ -77,6 +77,7 @@ function totalVolumeCredits(){
   return result;
 }
 
+
 function  totalAmount() {
   let result = 0
   for (let performance of invoice.performances) {
@@ -85,16 +86,19 @@ function  totalAmount() {
   return result;
 }
 
-function statement () {
-  let result = `Statement for ${invoice.customer}\n`
-  for (let performance of invoice.performances) {
-    result += ` ${playFor(performance).name}: ${
-        usd(amountFor(performance) / 100)
-    }(${performance.audience} seats)\n`
+function renderPlainText(data) {
+  let result = `Statement for ${data.customer}\n`;
+  for (let perf of data.performances) {
+    result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience} seats)\n`;
   }
+  result += `Amount owed is ${usd(totalAmount())}\n`;
+  result += `You earned ${totalVolumeCredits()} credits\n`;
+  return result;
+}
 
-  result += `Amount owed is ${usd( totalAmount() / 100)}\n`
-  result += `You earned ${totalVolumeCredits()} credits\n`
-
-  alert(result)
+function statement (invoice, plays) {
+  const statementData = {};
+  statementData.customer = invoice.customer;
+  statementData.performances = invoice.performances;
+  return renderPlainText(statementData, invoice, plays);
 }
