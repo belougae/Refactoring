@@ -1,5 +1,5 @@
 # Refactoring
-Refactoring: Improving the Design of Existing Code
+《重构》:改善既有代码的设计实践（javascript）<Refactoring>: Improving the Design of Existing Code
 
 这里是《重构》javascript 这本📚的代码实践。
 
