@@ -7,18 +7,6 @@ var plays = {
   othello: { name: 'Othello', type: 'tragedy' }
 }
 
-
-function volumeCreditsFor(aPerformance) {
-  let result = 0
-  // add volume credits
-  result += Math.max(aPerformance.audience - 30, 0)
-
-  // add extra credit for every ten comedy attendees
-  if ('comedy' === aPerformance.play.type)
-    result += Math.floor(aPerformance.audience / 5)
-  return result
-}
-
 function usd (aNumber) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -31,7 +19,7 @@ function usd (aNumber) {
 function totalVolumeCredits(data){
   let result = 0
   for (let performance of data.performances) {
-    result += volumeCreditsFor(performance)
+    result += performance.volumeCredits;
   }
   return result;
 }
@@ -84,9 +72,11 @@ function enrichPerformance(aPerformance) {
   const result = Object.assign({}, aPerformance);
   result.play = playFor(result);
   result.amount = amountFor(result);
+  result.volumeCredits = volumeCreditsFor(result);
   return result;
 }
 
+// 付款人
 function playFor(aPerformance) {
   return plays[aPerformance.playID];
 }
@@ -110,5 +100,17 @@ function amountFor(aPerformance) {
     default:
       throw new Error(`unknown type: ${aPerformance.play.type}`)
   }
+  return result
+}
+
+// 观众量积分
+function volumeCreditsFor(aPerformance) {
+  let result = 0
+  // add volume credits
+  result += Math.max(aPerformance.audience - 30, 0)
+
+  // add extra credit for every ten comedy attendees
+  if ('comedy' === aPerformance.play.type)
+    result += Math.floor(aPerformance.audience / 5)
   return result
 }
